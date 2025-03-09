@@ -243,9 +243,6 @@ public class UIInventory : MonoBehaviour
             RemoveSelctedItem(); // 선택한 아이템 초기화
         }
     }
-
-
-
     
     // # 2 착용하기 버튼
 
@@ -255,8 +252,8 @@ public class UIInventory : MonoBehaviour
 
     public void OnDropButton()
     {
-
-        inventoryWindow.SetActive(false);
+        ThrowItem(selectedItem.ItemData);
+        RemoveSelctedItem();
     }
 
 
