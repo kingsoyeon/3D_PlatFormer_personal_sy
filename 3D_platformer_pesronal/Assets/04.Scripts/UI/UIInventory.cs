@@ -172,4 +172,37 @@ public class UIInventory : MonoBehaviour
     {
         Instantiate(itemData.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
     }
+
+
+    /// ui 관련
+    
+    
+    public void SelectItem(int index)
+    {
+        if (slots[index].ItemData == null) return;
+
+        selectedItem = slots[index];
+        selectedItemIndex = index;
+
+        selectedItemName.text = selectedItem.ItemData.displayName;
+        selectedItemNDescription.text = selectedItem.ItemData.description;
+        selectedItemStatName.text = string.Empty;
+        selectedItemStatValue.text = string.Empty;
+
+        // 소비 아이템일 때만 StatName, StatValue 나타내기
+        for (int i = 0; i < selectedItem.ItemData.ItemsConsumables.Length; i++)
+        {
+            selectedItemStatName.text += selectedItem.ItemData.ItemsConsumables[i].type.ToString();
+            selectedItemStatValue.text += selectedItem.ItemData.ItemsConsumables[i].value.ToString();
+        }
+
+        useButton.SetActive(selectedItem.ItemData.type == ItemType.Consumable);
+        equipButton.SetActive(selectedItem.ItemData.type == ItemType.Equipable && !slots[index].equipped);
+        unEquipButton.SetActive(selectedItem.ItemData.type == ItemType.Equipable && slots[index].equipped);
+
+        dropButton.SetActive(true);
+        
+
+        
+    }
 }
