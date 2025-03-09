@@ -53,8 +53,8 @@ public class UIInventory : MonoBehaviour
         {
             slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>(); 
             slots[i].index = i;
-            slots[i].uiInventory = this; 
-            //slots.set();
+            slots[i].uiInventory = this;
+            slots[i].Clear();
         }
 
         ClearSelectedItemWindow();
@@ -68,6 +68,22 @@ public class UIInventory : MonoBehaviour
         selectedItemStatName.text = string.Empty;
         selectedItemStatValue.text = string.Empty;
     }
+
+    public void UpdateUI()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if(slots[i].ItemData != null)
+            {
+                slots[i].Set();
+            }
+            else
+            {
+                slots[i].Clear();
+            }
+        }
+    }
+
     // 인벤토리 열고 닫기
     public void Toggle()
     {
@@ -85,4 +101,6 @@ public class UIInventory : MonoBehaviour
     {
         return inventoryWindow.activeInHierarchy;
     }
+    
+    
 }
