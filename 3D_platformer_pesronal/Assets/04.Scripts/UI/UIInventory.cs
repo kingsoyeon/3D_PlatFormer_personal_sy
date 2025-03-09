@@ -102,5 +102,74 @@ public class UIInventory : MonoBehaviour
         return inventoryWindow.activeInHierarchy;
     }
     
+    // 중복 가능한 슬롯 확인하고 반환하는 메서드
+    ItemSlot GetItemStack(ItemData data)
+    {
+        for (int i = 0; i < slots.Length; i++) 
+        {
+            // 슬롯의 아이템과 넣으려는 아이템이 같고 / 아이템 개수가 최대를 넘지 않을때 
+            if (slots[i].ItemData == data && slots[i].quantity < data.maxStackAmount)
+            {
+                return slots[i];
+            }
+        }
+        return null ;
+    }
+
+    // 빈 슬롯 찾아서 반환 메서드
+    ItemSlot GetEmptySlot()
+    { 
+        for (int i = 0; i < slots.Length; i++)
+        {
+            // 아이템 안들어있을 때 그 슬롯 반환
+            if (slots[i].ItemData == null)
+            { return slots[i]; }
+        }
+        return null;
+    }
+
+
+    // 아이템 인벤토리에 추가
+    public void AddItem()
+    {
+        ItemData itemData = CharacterManager.Instance.Player.ItemData;
+
+        // 중복 가능한 아이템은 이 조건문을 탄다
+        if (itemData.canStack)
+        {
+            ItemSlot slot = GetItemStack(itemData);
+
+            // 슬롯이 있으면 그 슬롯에 넣어준다
+            if (slot != null)
+            {
+                slot.quantity++;
+                UpdateUI();
+                CharacterManager.Instance.Player.ItemData = null; // 들어갔으니까 data는 이제 null
+                return;
+            }
+        }
+        
+        // 중복 가능하지 않은 아이템들은 빈 슬롯을 찾는다
+
+        ItemSlot emptySlot = GetEmptySlot();
+
+        // 빈 슬롯이 있으면 거기에 넣어준다
+        if (emptySlot != null)
+        {
+            emptySlot.ItemData = itemData;
+            emptySlot.quantity = 1;
+            UpdateUI();
+            CharacterManager.Instance.Player.ItemData = null;
+            return;
+        }
+
+        // 중복도 안되고 빈 슬롯도 없으면 그냥 버린다
+        ThrowItem(itemData);
+        CharacterManager.Instance.Player.ItemData = null;
+    }
     
+    public void ThrowItem(ItemData itemData)
+    {
+        Instantiate(itemData.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
+    }
 }
