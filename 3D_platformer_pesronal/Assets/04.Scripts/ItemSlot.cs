@@ -13,7 +13,7 @@ public class ItemSlot : MonoBehaviour
     // 구성요소
     public Button button;
     public Image icon;
-    public TextMeshProUGUI quntityText;
+    public TextMeshProUGUI quantityText;
     private Outline outline;
 
 
@@ -31,9 +31,20 @@ public class ItemSlot : MonoBehaviour
         outline.enabled = equipped; // equipped가 true일 때 아웃라인 활성화
     }
 
-    
-    void Update()
+   
+    public void Set()
     {
-        
+        icon.gameObject.SetActive(true);
+        quantityText.text = quantity > 1 ? quantity.ToString() : string.Empty;
+
+        // 방어코드
+        if(outline != null ) {outline.enabled = equipped;}
+    }
+
+    public void Clear()
+    {
+        ItemData = null;
+        icon.gameObject.SetActive(false);
+        quantityText.text = string.Empty;
     }
 }
