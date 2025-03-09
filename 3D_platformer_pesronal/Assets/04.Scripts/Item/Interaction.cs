@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Interaction : MonoBehaviour
 { // 플레이어와 물체의 상호작용
@@ -18,6 +20,10 @@ public class Interaction : MonoBehaviour
     private float lastCheckTime; // 마지막 RAY 체크시간
 
     private Camera camera;
+
+    // 아이템 정보 프롬프트
+    public TextMeshProUGUI promptText;
+    
     void Start()
     {
         camera = Camera.main;
@@ -43,23 +49,39 @@ public class Interaction : MonoBehaviour
                     // 인터페이스 있는걸로 넣어준다
                     curInteractable = hit.collider.GetComponent<IInteractable>();
                     // 프롬프트 텍스트 띄워주는 함수 호출
+                    SetPromptText();
                 }
             }
         }
         // 검출되지 않으면
         else
         {
+            // 상호작용 중이지 않고 프롬프트도 없다
             curInteractable = null;
             curInteractGameObject = null;
+            promptText.gameObject.SetActive(false);
         }
     }
 
+    private void SetPromptText()
+    {
+        promptText.gameObject.SetActive (true);
+        promptText.text = curInteractable.GetInteractPrompt();
+    }
+
     // E키 눌렀을 때
-    void OnInteractInput(InputAction.CallbackContext context)
+    public void OnInteractInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
         {
             curInteractable.OnInteract();
+
+            // e키 누르면 내 인벤으로 들어가므로 
+            curInteractable = null;
+            curInteractGameObject=null;
+
+            // 프롬프트도 꺼줌
+            promptText.gameObject.SetActive(false);
         }
     }
 }
