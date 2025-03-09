@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rigidbody;
     public AnimationHandler animationHandler;
 
+    //인벤토리
+    public Action inventory;
+
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -137,5 +140,17 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false; // 아무것도 안 걸리면 False 반환
-    } 
+    }
+
+
+    ///////인벤토리
+    ///
+
+    public void OnInventoryButton(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            inventory?.Invoke();
+        }
+    }
 }
