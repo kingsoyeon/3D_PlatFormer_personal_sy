@@ -14,6 +14,9 @@ public class Interaction : MonoBehaviour
     public float maxCheckDistance; // 최대거리
     public LayerMask layerMask; // 레이어마스크
 
+    public float checkRate = 0.05f; // 0.05초마다 ray CHECK
+    private float lastCheckTime; // 마지막 RAY 체크시간
+
     private Camera camera;
     void Start()
     {
@@ -26,16 +29,21 @@ public class Interaction : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
+        // ray체크주기보다 더 많은 시간이 흘렀을 때, ray를 실행해준다.
+        if (Time.time - lastCheckTime> checkRate)
         {
-            // 레이로 검출한 애가 현재 상호작용 중인 게임오브젝트가 아니면, 이걸로 바꿔준다.
-            if (hit.collider.gameObject != curInteractGameObject)
-            {
-                curInteractGameObject = hit.collider.gameObject;
-                // 인터페이스 있는걸로 넣어준다
-                curInteractable = hit.collider.GetComponent<IInteractable>();
-                // 프롬프트 텍스트 띄워주는 함수 호출
+            lastCheckTime = Time.time;
 
+            if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
+            {
+                // 레이로 검출한 애가 현재 상호작용 중인 게임오브젝트가 아니면, 이걸로 바꿔준다.
+                if (hit.collider.gameObject != curInteractGameObject)
+                {
+                    curInteractGameObject = hit.collider.gameObject;
+                    // 인터페이스 있는걸로 넣어준다
+                    curInteractable = hit.collider.GetComponent<IInteractable>();
+                    // 프롬프트 텍스트 띄워주는 함수 호출
+                }
             }
         }
         // 검출되지 않으면
@@ -43,10 +51,8 @@ public class Interaction : MonoBehaviour
         {
             curInteractable = null;
             curInteractGameObject = null;
-
         }
     }
-
 
     // E키 눌렀을 때
     void OnInteractInput(InputAction.CallbackContext context)
