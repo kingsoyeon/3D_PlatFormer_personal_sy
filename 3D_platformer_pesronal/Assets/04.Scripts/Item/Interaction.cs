@@ -31,14 +31,15 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
-        // 물체 감지
-        Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2));
-        RaycastHit hit;
+        
 
         // ray체크주기보다 더 많은 시간이 흘렀을 때, ray를 실행해준다.
         if (Time.time - lastCheckTime> checkRate)
         {
             lastCheckTime = Time.time;
+            // 물체 감지
+            Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
             {
