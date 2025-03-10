@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     //인벤토리
     public Action inventory;
+    public bool canLook = true; // 마우스커서 잠김
 
     private void Awake()
     {
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
     }
     void LateUpdate()
     {
-        CameraLook();
+        if(canLook)  CameraLook();
     }
 
     // 이동 입력
@@ -151,6 +152,14 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             inventory?.Invoke();
+            ToggleCursor();
         }
+    }
+
+    void ToggleCursor()
+    {
+        bool toggle = Cursor.lockState == CursorLockMode.Locked;
+        Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
+        canLook = !toggle;
     }
 }
