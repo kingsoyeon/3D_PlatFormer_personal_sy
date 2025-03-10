@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+//using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,8 +12,10 @@ public class PlayerController : MonoBehaviour
     public float jumpPower;
     private Vector2 curMovementInput;
     public LayerMask groundLayerMask; // isgrounded에 쓰임
+    public LayerMask wallLayerMask; // isClimbing
 
-    public float useStamina;
+    public float useStamina; // 점프/공격할 때 소모되는 stamina
+    public float climbingStamina; // 벽 탈 때 소모되는 스태미나
 
     [Header("Look")]
     public Transform cameraContainer;
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     public PlayerConditions playerConditions;
 
+    
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -76,20 +80,32 @@ public class PlayerController : MonoBehaviour
     {
         // 방향 (앞/뒤 + 좌/우)
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
+        
+        
+        // 벽타기
+        if (IsClimbing()  && CharacterManager.Instance.Player.condition.UseStamina(climbingStamina)) 
+        {
+            dir = transform.up * curMovementInput.y + transform.right * curMovementInput.x;
+          dir *= moveSpeed;
+            rigidbody.useGravity = false;
+            rigidbody.velocity = dir;  
+        }
+       
+            //// 대각선 이동 시 속도 균일화
+            //if (dir.magnitude > 1f)
+            //    dir.normalized();
+           // dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
+            // 속력 = 방향 x 속도
+            dir *= moveSpeed;
 
-        //// 대각선 이동 시 속도 균일화
-        //if (dir.magnitude > 1f)
-        //    dir.normalized();
+            // 기존 y 속도 유지
+            dir.y = rigidbody.velocity.y;
 
-        // 속력 = 방향 x 속도
-        dir *= moveSpeed;
-
-        // 기존 y 속도 유지
-        dir.y = rigidbody.velocity.y;
-
-        // Rigidbody 속도 적용
-        rigidbody.velocity = dir;
-
+            // Rigidbody 속도 적용
+            rigidbody.velocity = dir;
+            rigidbody.useGravity = true;
+        
+        
     }
 
     // 회전 입력값
@@ -122,7 +138,6 @@ public class PlayerController : MonoBehaviour
            
                 rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
                 animationHandler.Jump();
-            
         }
     }
 
@@ -144,12 +159,31 @@ public class PlayerController : MonoBehaviour
             // groundLayerMask 검출, player만 제외해야 함
             if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
             {
+                
                 return true; // 걸리면 True 반환
             }
         }
         return false; // 아무것도 안 걸리면 False 반환
     }
 
+    // 벽 인식
+    bool IsClimbing()
+    {
+
+        // Ray 검출
+
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1f, wallLayerMask))
+        {
+            Debug.Log("벽");
+            
+            return true;
+        }
+            return false; // 아무것도 안 걸리면 False 반환
+
+    }
 
     ///////인벤토리
     ///
