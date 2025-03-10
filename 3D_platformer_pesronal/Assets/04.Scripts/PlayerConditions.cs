@@ -48,8 +48,11 @@ public class PlayerConditions : MonoBehaviour, IDamagble
     }
 
     // 스태미나 감소
-    public void UseStamina()
+    public bool UseStamina(float amount)
     {
-        stamina.Substract(50f * stamina.passiveValue * Time.deltaTime);
+        if (stamina.curValue - amount < 0f) { return false; }
+
+        stamina.Substract(amount);
+        return true;
     }
 }

@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 curMovementInput;
     public LayerMask groundLayerMask; // isgrounded에 쓰임
 
+    public float useStamina;
+
     [Header("Look")]
     public Transform cameraContainer;
     //public Transform playerPosition;
@@ -115,11 +117,12 @@ public class PlayerController : MonoBehaviour
     // 점프 입력
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && isGrounded())
+        if (context.phase == InputActionPhase.Started && isGrounded() && CharacterManager.Instance.Player.condition.UseStamina(useStamina))
         {
-            rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
-            animationHandler.Jump();
-            playerConditions.UseStamina();
+           
+                rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
+                animationHandler.Jump();
+            
         }
     }
 
