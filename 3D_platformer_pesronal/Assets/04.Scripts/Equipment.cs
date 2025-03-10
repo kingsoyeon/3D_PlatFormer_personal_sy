@@ -17,4 +17,20 @@ public class Equipment : MonoBehaviour
     {
         
     }
+
+    public void Equip()
+    {
+        //if(curEquip == null) { curEquip =  }
+    }
+
+    public void UnEquip()
+    {
+        // 착용하고 있는 것이 있으면
+        //if (curEquip != null)
+        //{
+        //    해제한다
+
+        //}
+    }
+
 }
