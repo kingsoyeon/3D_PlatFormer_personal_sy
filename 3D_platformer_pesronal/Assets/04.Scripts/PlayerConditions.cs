@@ -38,10 +38,18 @@ public class PlayerConditions : MonoBehaviour, IDamagble
     {
         health.Add(amount);
     }
+    
+    // 데미지
 
     public void TakePhysicalDamage(int damageAmount)
     {
         health.Substract(damageAmount * Time.deltaTime);
         OnTakeDamge?.Invoke();
+    }
+
+    // 스태미나 감소
+    public void UseStamina()
+    {
+        stamina.Substract(50f * stamina.passiveValue * Time.deltaTime);
     }
 }

@@ -30,10 +30,13 @@ public class PlayerController : MonoBehaviour
     public Action inventory;
     public bool canLook = true; // 마우스커서 잠김
 
+    public PlayerConditions playerConditions;
+
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
         animationHandler = GetComponent<AnimationHandler>();
+        playerConditions = GetComponent<PlayerConditions>();
     }
     void Start()
     {
@@ -116,6 +119,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
             animationHandler.Jump();
+            playerConditions.UseStamina();
         }
     }
 
