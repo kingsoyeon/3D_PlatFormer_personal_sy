@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+
 
 public class MovingFlatform : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class MovingFlatform : MonoBehaviour
     private Vector3 startPos;
     private Vector3 dirVec;// 방향벡터
     private Vector3 moveVec; // 실제 이동벡터
+
+    public Transform platformTransform;
 
     public enum MoveDirection
     {
@@ -37,36 +41,32 @@ public class MovingFlatform : MonoBehaviour
                 break;
         } 
     }
-        void Update()
-        {
+    void Update()
+    {
 
         // 이동 처리
-        Vector3 moveVec = dirVec * movingSpeed * Time.deltaTime;
-        rigidBody.MovePosition(transform.position + moveVec);
+        //Vector3 moveVec = dirVec * movingSpeed * Time.deltaTime;
+        //rigidBody.MovePosition(transform.position + moveVec);
 
+        transform.position += dirVec * movingSpeed * Time.deltaTime;
 
-        if (Vector3.Distance(startPos, transform.position) >= maxMovingDistance) 
+        if (Vector3.Distance(startPos, transform.position) >= maxMovingDistance)
         {
             dirVec = -dirVec;
             startPos = transform.position;
         }
-
-
-        //if (isRight)
-        //{
-        //    moveVec = dirVec * movingSpeed * Time.deltaTime;
-        //    rigidBody.MovePosition(transform.position + moveVec);
-        //    if (dirVec.x >= maxMovingDistance)
-        //        isRight = false;
-        //}
-        //else
-        //{
-        //    moveVec = -dirVec * movingSpeed * Time.deltaTime;
-        //    rigidBody.MovePosition(transform.position + moveVec);
-        //    if (dirVec.x <= maxMovingDistance)
-        //        isRight = true;
-        //}
-
-        }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        collision.transform.parent = platformTransform;
+   
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        collision.transform.parent = null;
+    }
+}
+
 
