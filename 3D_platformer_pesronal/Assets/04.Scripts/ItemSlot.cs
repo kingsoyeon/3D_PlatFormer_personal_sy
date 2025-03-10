@@ -31,10 +31,11 @@ public class ItemSlot : MonoBehaviour
         outline.enabled = equipped; // equipped가 true일 때 아웃라인 활성화
     }
 
-   
+
     public void Set()
     {
         icon.gameObject.SetActive(true);
+        icon.sprite = ItemData.icon;
         quantityText.text = quantity > 1 ? quantity.ToString() : string.Empty;
 
         // 방어코드
@@ -47,4 +48,10 @@ public class ItemSlot : MonoBehaviour
         icon.gameObject.SetActive(false);
         quantityText.text = string.Empty;
     }
+
+    public void OnClickButton()
+    {
+        uiInventory.SelectItem(index);
+    }
+
 }
