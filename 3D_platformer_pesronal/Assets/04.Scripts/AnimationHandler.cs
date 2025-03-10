@@ -9,9 +9,11 @@ public class AnimationHandler : MonoBehaviour
     private static readonly int isAttack = Animator.StringToHash("Attack");
     private static readonly int isMove = Animator.StringToHash("Move");
     private static readonly int isJump = Animator.StringToHash("Jump");
+    private static readonly int isCoin = Animator.StringToHash("GetCoin");
 
     void Start()
     {
+        
         animator =  GetComponent<Animator>();
     }
 
@@ -37,5 +39,10 @@ public class AnimationHandler : MonoBehaviour
     public void Attack()
     {
         animator.SetTrigger(isAttack);
+    }
+
+    public void GetCoin()
+    {
+        animator.SetTrigger(isCoin);
     }
 }

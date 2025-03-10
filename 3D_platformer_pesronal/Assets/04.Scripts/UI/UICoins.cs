@@ -10,10 +10,11 @@ public class UICoins : MonoBehaviour
     
     public int quantity;
 
+    public AnimationHandler animationHandler;
 
     void Start()
     {
-        
+        animationHandler =  GetComponentInChildren<AnimationHandler>();
     }
 
     
@@ -26,5 +27,7 @@ public class UICoins : MonoBehaviour
     {
         quantity++;
         coinText.text = $"X {quantity}";
+        animationHandler.GetCoin();
+
     }
 }

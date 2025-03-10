@@ -5,7 +5,9 @@ using UnityEngine;
 public class CoinObject : MonoBehaviour
 {
     public UICoins uiCoins;
-    
+
+    //public AnimationHandler animationHandler;
+
     void Start()
     {
         
@@ -24,10 +26,12 @@ public class CoinObject : MonoBehaviour
         // 2분 뒤 재출현
         StartCoroutine(ActiveAfterDelay(120f));
 
-        this.gameObject.SetActive(false);
-
         // UI에 연결
         uiCoins.GetCoin();
+
+        
+        this.gameObject.SetActive(false);
+
     }
 
     private IEnumerator ActiveAfterDelay(float delay)
