@@ -42,7 +42,7 @@ public class UIInventory : MonoBehaviour
         dropPosition = CharacterManager.Instance.Player.dropPositon;
 
         controller.inventory += Toggle;
-        //CharacterManager.Instance.Player.AddItem += AddItem;
+        CharacterManager.Instance.Player.AddItem += AddItem;
 
         inventoryWindow.SetActive(false);
 
