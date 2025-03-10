@@ -31,10 +31,10 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
-        
+
 
         // ray체크주기보다 더 많은 시간이 흘렀을 때, ray를 실행해준다.
-        if (Time.time - lastCheckTime> checkRate)
+        if (Time.time - lastCheckTime > checkRate)
         {
             lastCheckTime = Time.time;
             // 물체 감지
@@ -53,14 +53,15 @@ public class Interaction : MonoBehaviour
                     SetPromptText();
                 }
             }
-        }
-        // 검출되지 않으면
-        else
-        {
-            // 상호작용 중이지 않고 프롬프트도 없다
-            curInteractable = null;
-            curInteractGameObject = null;
-            promptText.gameObject.SetActive(false);
+
+            // 검출되지 않으면
+            else
+            {
+                // 상호작용 중이지 않고 프롬프트도 없다
+                curInteractable = null;
+                curInteractGameObject = null;
+                promptText.gameObject.SetActive(false);
+            }
         }
     }
 
