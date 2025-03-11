@@ -13,12 +13,6 @@ public class BlockObject : MonoBehaviour
         resources = GetComponent<Resources>();
     }
 
-    void Update()
-    {
-        
-    }
-
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player")) // 플레이어와 충돌했을 때

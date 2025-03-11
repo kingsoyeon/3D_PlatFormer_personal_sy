@@ -8,8 +8,7 @@ public class UIConditions : MonoBehaviour
     
     public Condition stamina;
 
-    // 추후 필요한 스탯 업데이트
-    // public Condition Speed;
+    public Condition speed;
  
     void Start()
     {

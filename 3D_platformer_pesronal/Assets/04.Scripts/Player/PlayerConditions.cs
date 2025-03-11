@@ -10,8 +10,8 @@ public class PlayerConditions : MonoBehaviour, IDamagble
     Condition health { get { return uiCondition.health; } }
     Condition stamina { get { return uiCondition.stamina; } }
 
-    // 스탯 추가시 수정
-    // Condition speed { get { return uiCondition.speed; } }
+    Condition speed { get { return uiCondition.speed; } }
+
 
     public Action OnTakeDamge;
 
@@ -38,7 +38,17 @@ public class PlayerConditions : MonoBehaviour, IDamagble
     {
         health.Add(amount);
     }
-    
+
+    // 섭취 시 스태미나 증가
+    public void EatStamina(float amount)
+    {
+        stamina.Add(amount);
+    }
+    public void EatSpeed()
+    {
+        CharacterManager.Instance.Player.controller.moveSpeed++;
+    }
+
     // 데미지
 
     public void TakePhysicalDamage(int damageAmount)
