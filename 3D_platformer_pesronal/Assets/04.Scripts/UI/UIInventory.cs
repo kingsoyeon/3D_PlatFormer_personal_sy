@@ -238,6 +238,10 @@ public class UIInventory : MonoBehaviour
                     // 소비 타입에 따른 함수 호출
                     case ConsumableType.Health:
                         conditions.Eat(selectedItem.ItemData.ItemsConsumables[i].value); break;
+                    case ConsumableType.Stamina:
+                        conditions.EatStamina(selectedItem.ItemData.ItemsConsumables[i].value); break;
+                    case ConsumableType.Speed:
+                        conditions.EatSpeed(); break;
                 }
             }
             RemoveSelctedItem(); // 선택한 아이템 초기화
