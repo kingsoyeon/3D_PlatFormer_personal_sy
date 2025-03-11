@@ -34,19 +34,25 @@ public class PlayerConditions : MonoBehaviour, IDamagble
 
 
     // 섭취 시 체력 증가
-    public void Eat(float amount)
+    public void EatHealthItem(float amount)
     {
         health.Add(amount);
     }
 
     // 섭취 시 스태미나 증가
-    public void EatStamina(float amount)
+    public void EatStaminaItem(float amount)
     {
         stamina.Add(amount);
     }
-    public void EatSpeed()
+    public void EatSpeedItem()
     {
-        CharacterManager.Instance.Player.controller.moveSpeed++;
+        StartCoroutine(SpeedUp());
+    }
+    public IEnumerator SpeedUp()
+    {
+        CharacterManager.Instance.Player.controller.moveSpeed += 3;
+        yield return new WaitForSeconds(60f);
+        CharacterManager.Instance.Player.controller.moveSpeed -= 3;
     }
 
     // 데미지
