@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 //using static UnityEditor.Timeline.TimelinePlaybackControls;
@@ -37,7 +38,10 @@ public class PlayerController : MonoBehaviour
 
     public PlayerConditions playerConditions;
 
-    
+    // 런처
+    private LauncherObject currentLauncher; // 현재 접촉한 런처
+
+
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -184,6 +188,67 @@ public class PlayerController : MonoBehaviour
             return false; // 아무것도 안 걸리면 False 반환
 
     }
+    // 플랫폼 발사대 충돌 여부
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.TryGetComponent<LauncherObject>(out LauncherObject launcher))
+        {
+            Debug.Log("런처 충돌");
+            currentLauncher = launcher;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent<LauncherObject>(out LauncherObject launcher))
+        {
+            currentLauncher = null;
+        }
+    }
+   
+    // 플랫폼 발사대
+
+    public void OnLauncher(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started && currentLauncher != null)
+        {
+            Debug.Log("R 누름");
+            StartCoroutine(Launch());
+        }
+    }
+    private IEnumerator Launch()
+    {
+        Debug.Log("발사 실행됨");
+        Vector3 startPos = transform.position;
+        Vector3 endPos = transform.position + transform.forward * 40f + Vector3.down * 5f; // z 좌표 +30, y 좌표 +10
+        float duration = 2f; // 이동시간
+        float elapsedTime = 0f; // 경과시간
+        float height = 20f; // 포물선 높이
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        while (elapsedTime < duration)
+        {
+            // 포물선 운동 계산
+            Vector3 targetPos = Parabola(startPos, endPos, height, elapsedTime / duration);
+            // 이동
+            rb.MovePosition(targetPos);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+
+        }
+    }
+
+    // 발사대-포물선 함수
+    protected static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
+    {
+        Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
+        Vector3 mid = Vector3.Lerp(start, end, t);
+        return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
+    }
+
 
     ///////인벤토리
     ///

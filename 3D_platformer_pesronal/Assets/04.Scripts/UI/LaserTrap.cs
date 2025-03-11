@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+public enum LaszerZone
+{
+    Tunnel,
+    PlatformLauncher
+}
+
 public class LaserTrap : MonoBehaviour
 {
     // 띄울 메세지
@@ -14,11 +20,26 @@ public class LaserTrap : MonoBehaviour
 
     public LayerMask playerLayer;
 
+    // 레이저 구역 설정
+    public LaszerZone zone;
+
     private bool hasPopuped = false; // 이전에 팝업이 되었었는지
+
+    // 런처 참조
+    
 
     private void Start()
     {
         TrapText.gameObject.SetActive(false);
+
+        // 구역에 따른 텍스트 팝업 비활성화 조건
+        switch (zone)
+        {
+            case LaszerZone.Tunnel:
+                break;
+            case LaszerZone.PlatformLauncher:
+                break;
+        }
     }
     void Update()
     {
@@ -36,7 +57,6 @@ public class LaserTrap : MonoBehaviour
         // 플레이어가 감지가 되면
         if (hits.Length > 0 && !hasPopuped)
         {
-            
             hasPopuped = true;
             StartCoroutine(PopupText());
         }  
@@ -44,8 +64,18 @@ public class LaserTrap : MonoBehaviour
 
     private IEnumerator PopupText()
     {
+        switch (zone) 
+        {
+            case LaszerZone.Tunnel:
         TrapText.gameObject.SetActive(true);
         yield return new WaitForSeconds(2f);
         TrapText.gameObject.SetActive(false);
+                break;
+
+            case LaszerZone.PlatformLauncher:
+        TrapText.gameObject.SetActive(true);
+
+                break;
+        }
     }
 }
