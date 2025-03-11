@@ -59,7 +59,13 @@ public class LaserTrap : MonoBehaviour
         {
             hasPopuped = true;
             StartCoroutine(PopupText());
-        }  
+        }
+
+        else if (hits.Length == 0 && hasPopuped)
+        {
+            hasPopuped = false;
+            TrapText.gameObject.SetActive(false);  // 텍스트 끄기
+        }
     }
 
     private IEnumerator PopupText()
@@ -74,8 +80,15 @@ public class LaserTrap : MonoBehaviour
 
             case LaszerZone.PlatformLauncher:
         TrapText.gameObject.SetActive(true);
+                // R을 누르는 순간에 텍스트 꺼짐
+                PlayerController.OnLauncherComplete += CloseText;
 
                 break;
         }
+    }
+
+    private void CloseText()
+    {
+        TrapText.gameObject.SetActive(false);
     }
 }

@@ -6,7 +6,7 @@ public class LauncherObject : MonoBehaviour
 {
 
     private bool canLaunch = false; // 발사가능상태인지 확인
-    public bool CanLaunch => canLaunch;
+    
 
     void Start()
     {
@@ -23,8 +23,6 @@ public class LauncherObject : MonoBehaviour
     {
         canLaunch = true;
 
-        //Rigidbody rigidbody = collision.transform.GetComponent<Rigidbody>();
-        //rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     private void OnCollisionExit(Collision collision)
     {

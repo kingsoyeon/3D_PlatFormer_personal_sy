@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
     // 런처
     private LauncherObject currentLauncher; // 현재 접촉한 런처
+    public static bool isLaunch = false; // 런치 되었는지
+    public static event Action OnLauncherComplete; // Launch() 종료 후 호출할 이벤트 선언
 
 
     private void Awake()
@@ -214,12 +216,14 @@ public class PlayerController : MonoBehaviour
         if(context.phase == InputActionPhase.Started && currentLauncher != null)
         {
             Debug.Log("R 누름");
+            OnLauncherComplete?.Invoke();
             StartCoroutine(Launch());
         }
     }
     private IEnumerator Launch()
     {
         Debug.Log("발사 실행됨");
+        isLaunch = true;
         Vector3 startPos = transform.position;
         Vector3 endPos = transform.position + transform.forward * 40f + Vector3.down * 5f; // z 좌표 +30, y 좌표 +10
         float duration = 2f; // 이동시간
